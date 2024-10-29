@@ -294,7 +294,7 @@ const JobCreate = ({ globalConfig }) => {
             if (typeof data.devices == 'undefined') {
                 data.devices = {}
             }
-            gpuMemResourceGib = Math.round(gpuResource * 1000 * 1000 * 1000 / (1024 * 1024 * 1024))
+            var gpuMemResourceGib = Math.round(gpuResource * 1000 * 1000 * 1000 / (1024 * 1024 * 1024))
             data.devices['aliyun.com/gpu-mem'] = gpuMemResourceGib
         }
 
