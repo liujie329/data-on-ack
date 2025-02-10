@@ -105,6 +105,7 @@ type NotebookMessage struct {
 	Event      string   `json:"event"`
 	Token      string   `json:"token"`
 	ErrMessage string   `json:"errMessage"`
+	UserName   string   `json:"userName"`
 }
 
 type NotebookMessages []NotebookMessage
@@ -385,9 +386,10 @@ func (nh *NotebookHandler) ListNotebookFromStorage(namespace, userName, userId s
 			Event:      event,
 			Token:      item.Token,
 			ErrMessage: errMessage,
+			UserName:   userId,
 		})
 	}
-	//sort.Sort(NotebookMessages(notebookMessageList))
+	sort.Sort(NotebookMessages(notebookMessageList))
 	return notebookMessageList, nil
 }
 
@@ -468,6 +470,7 @@ func (nh *NotebookHandler) ListNotebook(namespace string) ([]NotebookMessage, er
 			Status:     string(status),
 			Event:      event,
 			ErrMessage: errMessage,
+			UserName:   strings.Replace(item.Labels["User"], "-", "@", -1),
 		}
 		notebookMessageList = append(notebookMessageList, tempNotebookMessage)
 	}

@@ -111,7 +111,7 @@ const JobCreate = ({ globalConfig }) => {
                 role: "Worker",
                 replicas: 1,
                 resource: {
-                    gpu: 1,
+                    gpu: 0,
                     cpu: 4,
                     memory: 8
                 },
@@ -295,7 +295,7 @@ const JobCreate = ({ globalConfig }) => {
                 data.devices = {}
             }
             var gpuMemResourceGib = Math.round(gpuResource * 1000 * 1000 * 1000 / (1024 * 1024 * 1024))
-            data.devices['aliyun.com/gpu-mem'] = gpuMemResourceGib
+            data.devices['aliyun.com/gpu-mem'] = gpuMemResourceGib.toString();
         }
 
         // data.annotations['kubeflow.org/tenancy'] = JSON.stringify({

@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-VERSION:=v1.2.0
+VERSION:=v1.2.2
 GIT_USER:=aliyun
 GIT_COMMIT:=$(shell git rev-parse --short HEAD)
 IMAGE_REGISTRY ?= registry.cn-beijing.aliyuncs.com

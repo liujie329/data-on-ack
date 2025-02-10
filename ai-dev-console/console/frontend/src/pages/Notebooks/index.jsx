@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import {Button, Tooltip, Menu, Space, Dropdown, Select, Form} from 'antd';
+import {Button, Tooltip, Menu, Space, Dropdown, Select, Form, Modal} from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout'
 import { connect } from "dva";
 import {useIntl, history, getLocale} from "umi";
-import {DeleteOutlined, ExclamationCircleFilled, MoreOutlined} from '@ant-design/icons';
+import {DeleteOutlined, ExclamationCircleFilled, ExclamationCircleOutlined, MoreOutlined} from '@ant-design/icons';
 import ProTable from '@ant-design/pro-table';
 import { listNotebook, createNotebook, stopNotebook, startNotebook, deleteNotebook, syncNotebooks} from './service';
 import {queryCurrentUser} from "@/services/global";
 import styles from "./style.less";
 import LogModal from "./LogModal";
+import {deleteJobs} from "../Jobs/service";
+import moment from "moment/moment";
 
 const Notebooks = props => {
   const {
@@ -119,10 +121,23 @@ const Notebooks = props => {
   }
 
   const onDeleteNotebook = async (namespace, name) => {
-    const response = await deleteNotebook(namespace, name)
-    if (response.code == 200) {
-      setNotebookList(notebookList.filter(item=>item.name !== name || item.namespace != namespace))
-    }
+    Modal.confirm({
+      title: intl.formatMessage({ id: "dlc-dashboard-delete-notebook" }),
+      icon: <ExclamationCircleOutlined />,
+      content: `${intl.formatMessage({
+        id: "dlc-dashboard-delete-notebook-confirm",
+      })} ${name} ?`,
+      onOk: () =>
+          deleteNotebook(
+              namespace,
+              name
+          ).then((response) => {
+            if (response.code == 200) {
+              setNotebookList(notebookList.filter(item=>item.name !== name || item.namespace != namespace))
+            }
+          }),
+      onCancel() {},
+    });
   }
 
   const fetchNamespace = async () => {
@@ -193,6 +208,10 @@ const Notebooks = props => {
     {
       title: 'Token',
       dataIndex: 'token',
+    },
+    {
+      title: 'UserName',
+      dataIndex: 'userName',
     },
     {
       title: 'PVCs',
